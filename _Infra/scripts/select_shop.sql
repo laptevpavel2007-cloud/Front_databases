@@ -4,7 +4,7 @@ select
     isnull(vg.description, 'Без группы') as vendor_group,
     v.firstname as vendor_name,
     p.description as product_name,
-    sum(try_cast(so.amount as decimal(18,2))) as total_amount
+    sum(cast(so.amount as decimal(18,2))) as total_amount
 from [dbo].[bm_storageoperations] so
 join [dbo].[vendors] v on so.vendorid = v.id
 left join [dbo].[vendorgroup] vg on v.clientgroup = vg.vendorgroupid
@@ -18,8 +18,8 @@ select
     format(j.dater, 'yyyy-MM') as sales_month,
     tt.description as operation_type,
     p.description as product_name,
-    sum(try_cast(jd.quantity as decimal(18,2))) as total_sold,
-    sum(try_cast(jd.sbrutto as decimal(18,2))) as total_revenue
+    sum(cast(jd.quantity as decimal(18,2))) as total_sold,
+    sum(cast(jd.sbrutto as decimal(18,2))) as total_revenue
 from [dbo].[bm_journal_details] jd
 join [dbo].[journal] j on jd.sourceid = j.id
 left join [dbo].[transtype] tt on j.transtype = tt.transtypeid
@@ -51,7 +51,7 @@ select
     datepart(quarter, j.dater) as quarter_num,
     p.lastname + ' ' + p.firstname as employee_name,
     count(distinct j.id) as receipts_count,
-    sum(try_cast(j.amount as decimal(18,2))) as total_revenue,
+    sum(cast(j.amount as decimal(18,2))) as total_revenue,
     count(distinct js.id) as sessions_count
 from [dbo].[journal] j
 join [dbo].[personnel] p on j.loginid = p.personid
@@ -65,9 +65,9 @@ select
     datepart(year, so.dateadd) as year_num,
     datepart(week, so.dateadd) as week_num,
     p.description as product_name,
-    sum(case when so.operationid = 1 then try_cast(so.quantity as decimal(18,2)) else 0 end) as quantity_in,
-    sum(case when so.operationid = 2 then try_cast(so.quantity as decimal(18,2)) else 0 end) as quantity_out,
-    sum(case when so.operationid = 1 then try_cast(so.quantity as decimal(18,2)) else -try_cast(so.quantity as decimal(18,2)) end) as net_movement
+    sum(case when so.operationid = 1 then cast(so.quantity as decimal(18,2)) else 0 end) as quantity_in,
+    sum(case when so.operationid = 2 then cast(so.quantity as decimal(18,2)) else 0 end) as quantity_out,
+    sum(case when so.operationid = 1 then cast(so.quantity as decimal(18,2)) else -cast(so.quantity as decimal(18,2)) end) as net_movement
 from [dbo].[bm_storageoperations] so
 join [dbo].[product] p on so.productid = p.id
 group by datepart(year, so.dateadd), datepart(week, so.dateadd), p.description
