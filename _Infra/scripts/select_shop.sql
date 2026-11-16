@@ -1,4 +1,4 @@
--- 1. Анализ закупки продукции. Шаг Месяц.
+-- 1. Анализ закупки продукции.
 select 
     format(so.dateadd, 'yyyy-MM') as purchase_month,
     vg.description as vendor_group,
@@ -13,7 +13,7 @@ where so.operationid = 1
 group by format(so.dateadd, 'yyyy-MM'), vg.description, v.firstname, p.description
 order by purchase_month desc, total_amount desc;
 
--- 2. Анализ продажи товара. Шаг Месяц.
+-- 2. Анализ продажи товара.
 select 
     format(j.dater, 'yyyy-MM') as sales_month,
     tt.description as operation_type,
