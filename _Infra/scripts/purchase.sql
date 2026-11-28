@@ -10,7 +10,7 @@ begin
 
     begin
 
-                create sequence seq_purchases;
+        create sequence seq_purchases;
         comment on sequence seq_purchases is 'Счётчик внутренних кодов закупок';
 
         create table purchases (
